@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Settings Value Checker</string>
-    <string name="current_brightness_level">Current brightness level:</string>
-    <string name="volume_type">Volume Type</string>
-    <string name="max_volume_level">Max volume level:</string>
-    <string name="current_volume_level">Current volume level:</string>
+    <string name="current_brightness_level">Current brightness level(0~255): </string>
+    <string name="volume_type">Volume Type: </string>
+    <string name="max_volume_level">Max volume level: </string>
+    <string name="current_volume_level">Current volume level: </string>
     <string name="refresh">Refresh</string>
 </resources>

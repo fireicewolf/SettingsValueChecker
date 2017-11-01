@@ -1,7 +1,11 @@
 package com.dukeg.settingsvaluechecker;
 
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.media.AudioManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -9,27 +13,44 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.dukeg.settingsvaluechecker.brightness.brightnessChecker;
-import com.dukeg.settingsvaluechecker.volume.volumeChecker;
-
 public class MainActivity extends AppCompatActivity {
 
-    int call = 0;
-    int system = 1;
-    int ringtone = 2;
-    int media = 3;
-    int alarm = 4;
-    int notification = 5;
-    Context context;
-    volumeChecker mVolumeChecker;
-    brightnessChecker mBrightnessChecker;
+    int call = AudioManager.STREAM_VOICE_CALL;
+    int system = AudioManager.STREAM_SYSTEM;
+    int ringtone = AudioManager.STREAM_RING;
+    int media = AudioManager.STREAM_MUSIC;
+    int alarm = AudioManager.STREAM_ALARM;
+    int notification = AudioManager.STREAM_NOTIFICATION;
+
+    int volumeType;
+
+    int getSystemBrightness(Activity activity) {
+        int systemBrightness = 0;
+        ContentResolver contentResolver = activity.getContentResolver();
+        try {
+            systemBrightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS);
+        }
+        catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+        return systemBrightness;
+    }
+
+    int getVolume(int volumeType, Context context) {
+        AudioManager mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        assert mAudioManager != null;
+        return mAudioManager.getStreamVolume(volumeType);
+    }
+    int getMaxVolume(int volumeType, Context context) {
+        AudioManager mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        assert mAudioManager != null;
+        return mAudioManager.getStreamMaxVolume(volumeType);
+    }
 
     TextView current_brightness_level;
     TextView current_volume_level;
     TextView max_volume_level;
-
     Spinner volume_type_selector;
-
     Button refresh_button;
 
     @Override
@@ -42,58 +63,60 @@ public class MainActivity extends AppCompatActivity {
         max_volume_level = (TextView)findViewById(R.id.max_volume_level);
 
         volume_type_selector = (Spinner)findViewById(R.id.volume_type_selector);
-        volume_type_selector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                String[] volume_type = getResources().getStringArray(R.array.volume_type);
-                switch (volume_type[pos]) {
-                    case "call": {
-                        String maxVolume = String.valueOf(mVolumeChecker.getMaxVolume(call, context));
-                        String currentVolume = String.valueOf(mVolumeChecker.getVolume(call, context));
-                        break;
-                    }
-                    case "system": {
-                        String maxVolume = String.valueOf(mVolumeChecker.getMaxVolume(system, context));
-                        String currentVolume = String.valueOf(mVolumeChecker.getVolume(system, context));
-                        break;
-                    }
-                    case "ringtone": {
-                        String maxVolume = String.valueOf(mVolumeChecker.getMaxVolume(ringtone, context));
-                        String currentVolume = String.valueOf(mVolumeChecker.getVolume(ringtone, context));
-                        break;
-                    }
-                    case "media": {
-                        String maxVolume = String.valueOf(mVolumeChecker.getMaxVolume(media, context));
-                        String currentVolume = String.valueOf(mVolumeChecker.getVolume(media, context));
-                        break;
-                    }
-                    case "alarm": {
-                        String maxVolume = String.valueOf(mVolumeChecker.getMaxVolume(alarm, context));
-                        String currentVolume = String.valueOf(mVolumeChecker.getVolume(alarm, context));
-                        break;
-                    }
-                    case "notification": {
-                        String maxVolume = String.valueOf(mVolumeChecker.getMaxVolume(notification, context));
-                        String currentVolume = String.valueOf(mVolumeChecker.getVolume(notification, context));
-                        break;
-                    }
 
-                }
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Another interface callback
-            }
-        });
+
+        final CharSequence current_brightness_level_text = current_brightness_level.getText();
+        final CharSequence max_volume_level_text = max_volume_level.getText();
+        final CharSequence current_volume_level_text = current_volume_level.getText();
 
         refresh_button = (Button)findViewById(R.id.refresh_button);
         refresh_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String currentBrightness = String.valueOf(mBrightnessChecker.getSystemBrightness(MainActivity.this));
-                current_brightness_level.append(currentBrightness);
-                max_volume_level.append(maxVolume);
-                current_volume_level.append(currentVolume);
+                volume_type_selector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                        String[] volume_type = getResources().getStringArray(R.array.volume_type);
+                        switch (volume_type[pos]) {
+                            case "call": {
+                                volumeType = call;
+                                break;
+                            }
+                            case "system": {
+                                volumeType = system;
+                                break;
+                            }
+                            case "ringtone": {
+                                volumeType = ringtone;
+                                break;
+                            }
+                            case "media": {
+                                volumeType = media;
+                                break;
+                            }
+                            case "alarm": {
+                                volumeType = alarm;
+                                break;
+                            }
+                            case "notification": {
+                                volumeType = notification;
+                                break;
+                            }
+                        }
+                    }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        // Another interface callback
+                    }
+                });
+
+                String currentBrightness = String.valueOf(getSystemBrightness(MainActivity.this));
+                String maxVolume = String.valueOf(getMaxVolume(volumeType, MainActivity.this));
+                String currentVolume = String.valueOf(getVolume(volumeType, MainActivity.this));
+
+                current_brightness_level.setText(new StringBuffer(current_brightness_level_text).append(currentBrightness));
+                max_volume_level.setText(new StringBuffer(max_volume_level_text).append(maxVolume));
+                current_volume_level.setText(new StringBuffer(current_volume_level_text).append(currentVolume));
             }
         });
     }
