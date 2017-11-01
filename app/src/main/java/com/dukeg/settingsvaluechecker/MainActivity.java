@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                         if (volume_type[pos].equals(getString(R.string.call))){
                             volumeType = call;
                         }
-                        else if (volume_type[pos].equals(getString(R.string.call))){
+                        else if (volume_type[pos].equals(getString(R.string.system))){
                             volumeType = system;
                         }
                         else if (volume_type[pos].equals(getString(R.string.ringtone))){
