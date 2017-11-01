@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="volume_type">
-        <item>call</item>
-        <item>system </item>
-        <item>ringtone</item>
-        <item>media</item>
-        <item>alarm</item>
-        <item>notification</item>
+        <item>@string/call</item>
+        <item>@string/system </item>
+        <item>@string/ringtone</item>
+        <item>@string/media</item>
+        <item>@string/alarm</item>
+        <item>@string/notification</item>
     </string-array>
 </resources>

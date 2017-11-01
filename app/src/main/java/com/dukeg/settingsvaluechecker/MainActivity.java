@@ -58,18 +58,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        current_brightness_level = (TextView)findViewById(R.id.current_brightness_level);
-        current_volume_level = (TextView)findViewById(R.id.current_volume_level);
-        max_volume_level = (TextView)findViewById(R.id.max_volume_level);
+        current_brightness_level = findViewById(R.id.current_brightness_level);
+        current_volume_level = findViewById(R.id.current_volume_level);
+        max_volume_level = findViewById(R.id.max_volume_level);
 
-        volume_type_selector = (Spinner)findViewById(R.id.volume_type_selector);
+        volume_type_selector = findViewById(R.id.volume_type_selector);
 
 
         final CharSequence current_brightness_level_text = current_brightness_level.getText();
         final CharSequence max_volume_level_text = max_volume_level.getText();
         final CharSequence current_volume_level_text = current_volume_level.getText();
 
-        refresh_button = (Button)findViewById(R.id.refresh_button);
+        refresh_button = findViewById(R.id.refresh_button);
         refresh_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,31 +77,24 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                         String[] volume_type = getResources().getStringArray(R.array.volume_type);
-                        switch (volume_type[pos]) {
-                            case "call": {
-                                volumeType = call;
-                                break;
-                            }
-                            case "system": {
-                                volumeType = system;
-                                break;
-                            }
-                            case "ringtone": {
-                                volumeType = ringtone;
-                                break;
-                            }
-                            case "media": {
-                                volumeType = media;
-                                break;
-                            }
-                            case "alarm": {
-                                volumeType = alarm;
-                                break;
-                            }
-                            case "notification": {
-                                volumeType = notification;
-                                break;
-                            }
+
+                        if (volume_type[pos].equals(getString(R.string.call))){
+                            volumeType = call;
+                        }
+                        else if (volume_type[pos].equals(getString(R.string.call))){
+                            volumeType = system;
+                        }
+                        else if (volume_type[pos].equals(getString(R.string.ringtone))){
+                            volumeType = ringtone;
+                        }
+                        else if (volume_type[pos].equals(getString(R.string.media))){
+                            volumeType = media;
+                        }
+                        else if (volume_type[pos].equals(getString(R.string.alarm))){
+                            volumeType = alarm;
+                        }
+                        else if (volume_type[pos].equals(getString(R.string.notification))){
+                            volumeType = notification;
                         }
                     }
                     @Override

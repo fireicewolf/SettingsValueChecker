@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">读取设置值</string>
+    <string name="current_brightness_level">"当前亮度级别(0~255): "</string>
+    <string name="volume_type">"音量类型: "</string>
+    <string name="max_volume_level">"最大音量级别: "</string>
+    <string name="current_volume_level">"当前音量机械: "</string>
+    <string name="refresh">刷新</string>
+    <string name="call">通话</string>
+    <string name="system">系统</string>
+    <string name="ringtone">铃声</string>
+    <string name="media">媒体</string>
+    <string name="alarm">闹钟</string>
+    <string name="notification">通知</string>
+</resources>
